@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Калькулятор Автокредита</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e9eff5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 90%;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px 25px;
+      border-radius: 15px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+      font-size: 24px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 600;
+      color: #333;
+      font-size: 15px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      white-space: pre-line;
+      background: #f0f6ff;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 20px;
+      color: #333;
+      border-left: 4px solid #007bff;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px 15px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      label, input, select, button {
+        font-size: 14px;
+      }
+
+      button {
+        padding: 10px;
+      }
+
+      #result {
+        font-size: 14px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <script>
+    document.getElementById("carPrice").addEventListener("focus", function () {
+        if (this.value === "0") this.value = "";
+    });
+    </script>
+
+  <div class="container">
+    <h1>Калькулятор Автокредита</h1>
+
+    <label for="carPrice">Стоимость авто (₸):</label>
+    <input
+    type="number"
+    id="carPrice"
+    placeholder="Введите сумму авто"
+    />
+
+
+    <label for="compensation">Процент компенсации:</label>
+    <select id="compensation">
+      <option value="15">15%</option>
+      <option value="20">20%</option>
+    </select>
+
+    <label for="downPayment">Первоначальный взнос (%):</label>
+    <input type="number" id="downPayment" value="10" />
+
+    <label for="term">Срок займа (лет):</label>
+    <select id="term">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
+
+    <button onclick="calculateLoan()">Рассчитать</button>
+
+    <div id="result"></div>
+  </div>
+5
+  <script>
+    const rates = {
+      15: {
+        1: [0.1, 0.1, 0.1, 0.1, 0.1],
+        2: [5.0, 2.5, 0.1, 0.1, 0.1],
+        3: [10.5, 8.5, 6.5, 3.0, 0.1],
+        4: [13.0, 11.5, 9.5, 7.5, 4.0],
+        5: [14.5, 13.5, 12.0, 10.0, 7.0],
+        6: [15.5, 14.5, 13.0, 11.5, 9.0],
+        7: [16.0, 15.5, 14.0, 12.5, 10.5]
+      },
+      20: {
+        1: [0.1, 0.1, 0.1, 0.1, 0.1],
+        2: [0.1, 0.1, 0.1, 0.1, 0.1],
+        3: [6.0, 3.5, 0.5, 0.1, 0.1],
+        4: [9.5, 7.5, 5.0, 1.5, 0.1],
+        5: [11.5, 10.0, 8.0, 5.0, 1.0],
+        6: [13.0, 11.5, 10.0, 7.5, 4.0],
+        7: [14.0, 12.5, 11.0, 9.0, 6.0]
+      }
+    };
+
+    function getRate(comp, dp, term) {
+      const brackets = [19.99, 29.99, 39.99, 49.99, 100];
+      const rateList = rates[comp][term];
+      for (let i = 0; i < brackets.length; i++) {
+        if (dp <= brackets[i]) return rateList[i] / 100;
+      }
+      return 0.15;
+    }
+
+    function formatNumber(num) {
+      return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function calculateLoan() {
+      const price = parseFloat(document.getElementById("carPrice").value);
+      const comp = parseInt(document.getElementById("compensation").value);
+      const dp = parseFloat(document.getElementById("downPayment").value);
+      const term = parseInt(document.getElementById("term").value);
+
+      const compSum = price * comp / 100;
+      const dpSum = price * dp / 100;
+      const totalInitial = compSum + dpSum;
+      const loanAmount = price - dpSum;
+
+      const rate = getRate(comp, dp, term);
+      const monthlyRate = rate / 12;
+      const months = term * 12;
+      const monthlyPayment =
+        (loanAmount * monthlyRate) /
+        (1 - Math.pow(1 + monthlyRate, -months));
+
+      document.getElementById("result").textContent =
+        `Сумма компенсации: ${formatNumber(compSum)} ₸\n` +
+        `Первоначальный взнос: ${formatNumber(dpSum)} ₸\n` +
+        `Общий платёж при оформлении: ${formatNumber(totalInitial)} ₸\n` +
+        `Сумма автокредита: ${formatNumber(loanAmount)} ₸\n` +
+        `Годовая ставка: ${(rate * 100).toFixed(2)}%\n` +
+        `Ежемесячный платёж: ${formatNumber(monthlyPayment)} ₸`;
+    }
+  </script>
+</body>
+</html>
