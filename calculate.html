@@ -93,7 +93,7 @@
   <label for="carPrice">Стоимость авто (₸):</label>
   <input type="text" id="carPrice" placeholder="Введите сумму авто" />
 
-  <label for="downPayment">Первоначальнысссссссй взнос (%):</label>
+  <label for="downPayment">Первоначальный взнос (%):</label>
   <input type="number" id="downPayment" value="10" />
 
   <label for="term">Срок займа (лет):</label>
@@ -135,7 +135,7 @@
     4: [15.5, 14.5, 12.5, 10.0, 7.0],
     5: [17.0, 16.0, 14.5, 12.5, 10.0],
     6: [18.0, 17.0, 16.0, 14.0, 11.5],
-    7: [18.5, 18.0, 16.5, 15.0, 13.0ы]
+    7: [18.5, 18.0, 16.5, 15.0, 13.0]
   };
 
   function getRate(dp, term) {
@@ -187,11 +187,12 @@
       `Компенсация + ПВ: ${formatNumber(totalInitial)} ₸\n` +
       `Сумма автокредита: ${formatNumber(loanAmount)} ₸\n` +
       `Годовая ставка: ${(rate * 100).toFixed(2)}%\n` +
-      `Ежемесячный платёж: ${formatNumber(monthlyPayment)} ₸`;
+      `Ежемесячный платеж: ${formatNumber(monthlyPayment)} ₸`;
   }
 </script>
 
 </body>
 </html>
+
 
 
