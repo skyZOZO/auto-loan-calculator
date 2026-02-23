@@ -92,15 +92,20 @@
 
   <label for="carPrice">Стоимость авто (₸):</label>
 <input 
-  type="text" 
+  type="tel" 
   id="carPrice" 
   placeholder="Введите сумму авто"
   inputmode="numeric"
   pattern="[0-9]*"
 />
   <label for="downPayment">Первоначальный взнос (%):</label>
-  <input type="number" id="downPayment" value="10" />
-
+<input 
+  type="tel"
+  id="downPayment"
+  value="10"
+  inputmode="numeric"
+  pattern="[0-9]*"
+/>
   <label for="term">Срок займа (лет):</label>
   <select id="term">
     <option value="1">1</option>
@@ -121,16 +126,17 @@
   // Форматирование ввода (пробелы между тысячами)
   const carPriceInput = document.getElementById("carPrice");
 
-  carPriceInput.addEventListener("input", function (e) {
-    let value = e.target.value.replace(/\s/g, "").replace(/\D/g, "");
+carPriceInput.addEventListener("input", function () {
+  let numbers = this.value.replace(/\D/g, "");
 
-    if (value === "") {
-      e.target.value = "";
-      return;
-    }
+  if (!numbers) {
+    this.value = "";
+    return;
+  }
 
-    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  });
+  // Форматирование через пробел
+  this.value = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+});
 
   // Ставки только для 15%
   const rates = {
@@ -198,6 +204,7 @@
 
 </body>
 </html>
+
 
 
 
